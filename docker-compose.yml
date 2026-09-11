@@ -1,0 +1,45 @@
+# Ambiente de desenvolvimento.
+#
+# O banco é o PostgreSQL do Supabase, então não subimos um Postgres local: o
+# app precisa também do Supabase Auth, e ter dois bancos diferentes entre o
+# desenvolvimento e a produção é fonte garantida de divergência de schema.
+#
+#   docker compose up --build
+#
+# Frontend em http://localhost:5173, API em http://localhost:8000/docs.
+
+services:
+  api:
+    build:
+      context: ./backend
+    env_file: .env
+    environment:
+      # Dentro da rede do compose o frontend é servido pelo nginx na porta 80.
+      CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+    ports:
+      - '8000:8000'
+    volumes:
+      # Recarrega ao salvar durante o desenvolvimento.
+      - ./backend/app:/app/app:ro
+    command: >
+      sh -c "alembic upgrade head &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    healthcheck:
+      test: ['CMD', 'curl', '-fsS', 'http://localhost:8000/health']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:8000/api/v1
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+    ports:
+      - '5173:80'
+    depends_on:
+      api:
+        condition: service_healthy

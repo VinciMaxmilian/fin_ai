@@ -1,0 +1,104 @@
+.ticker-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.ticker-field__suggestions {
+  position: absolute;
+  top: 74px;
+  left: 0;
+  right: 0;
+  z-index: var(--z-sticky);
+  max-height: 216px;
+  overflow-y: auto;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  background-color: var(--glass-3-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.ticker-field__suggestions button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-xs);
+  text-align: left;
+  font-size: var(--text-sm);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.ticker-field__suggestions button:hover {
+  background-color: var(--glass-2-bg);
+}
+
+.ticker-field__symbol {
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.ticker-field__kind {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.ticker-field__status {
+  min-height: 18px;
+  font-size: var(--text-xs);
+}
+
+.ticker-field__quote {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.ticker-field__quote strong {
+  font-variant-numeric: tabular-nums;
+}
+
+/* -- Avisos sobre a procedência do preço ------------------------------------ */
+
+.quote-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  background-color: var(--warning-soft);
+  border: 1px solid color-mix(in srgb, var(--warning) 24%, transparent);
+}
+
+.quote-banner__icon {
+  color: var(--warning);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.quote-banner--info {
+  background-color: var(--info-soft);
+  border-color: color-mix(in srgb, var(--info) 24%, transparent);
+}
+
+.quote-banner--info .quote-banner__icon {
+  color: var(--info);
+}
+
+/* Marca discreta na linha do ativo quando o preço não é cotação ao vivo. */
+.price-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}

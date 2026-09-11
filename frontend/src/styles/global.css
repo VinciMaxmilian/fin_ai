@@ -1,0 +1,217 @@
+@import './tokens.css';
+
+/* ==========================================================================
+   Reset enxuto
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+  background-color: var(--bg-canvas);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* O ambiente por trás do vidro. Sem algo para desfocar, o efeito não existe:
+   dois halos largos e de baixa saturação dão o que as camadas precisam. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(58vw 58vw at 12% -8%, rgba(120, 140, 235, 0.16), transparent 62%),
+    radial-gradient(48vw 48vw at 96% 6%, rgba(90, 190, 190, 0.12), transparent 60%),
+    radial-gradient(64vw 64vw at 72% 104%, rgba(196, 150, 235, 0.11), transparent 62%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) body::before {
+    background:
+      radial-gradient(58vw 58vw at 12% -8%, rgba(84, 104, 220, 0.2), transparent 62%),
+      radial-gradient(48vw 48vw at 96% 6%, rgba(36, 130, 130, 0.16), transparent 60%),
+      radial-gradient(64vw 64vw at 72% 104%, rgba(140, 92, 190, 0.15), transparent 62%);
+  }
+}
+
+[data-theme='dark'] body::before {
+  background:
+    radial-gradient(58vw 58vw at 12% -8%, rgba(84, 104, 220, 0.2), transparent 62%),
+    radial-gradient(48vw 48vw at 96% 6%, rgba(36, 130, 130, 0.16), transparent 60%),
+    radial-gradient(64vw 64vw at 72% 104%, rgba(140, 92, 190, 0.15), transparent 62%);
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+}
+
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+}
+
+#root {
+  isolation: isolate;
+}
+
+/* ==========================================================================
+   Acessibilidade
+   ========================================================================== */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   Utilitários usados por toda a aplicação
+   ========================================================================== */
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  letter-spacing: -0.01em;
+}
+
+.text-positive {
+  color: var(--positive);
+}
+.text-negative {
+  color: var(--negative);
+}
+.text-warning {
+  color: var(--warning);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.spread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+/* Barra de rolagem discreta, presente só quando há o que rolar. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--neutral-300) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--neutral-300);
+  border-radius: var(--radius-pill);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--neutral-400);
+  background-clip: content-box;
+}
