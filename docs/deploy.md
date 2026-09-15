@@ -17,12 +17,22 @@ Netlify (estatico)            Vercel (serverless)          Supabase
 
 ## 1. Backend na Vercel
 
+URL do projeto: <https://fin-ai-three-pearl.vercel.app>
+
 ### Como a API vira uma serverless function
 
-`backend/api/index.py` importa o `app` do FastAPI e o `backend/vercel.json`
-reescreve **todas** as rotas para esse arquivo. A Vercel reconhece um objeto
-ASGI chamado `app` e o serve direto — nao ha handler para escrever, e nenhum
-caminho da API precisa ser listado.
+`backend/api/index.py` expoe um objeto ASGI chamado `app` e o `backend/vercel.json`
+manda **todas** as rotas para esse arquivo. A Vercel serve o ASGI direto — nao ha
+handler para escrever, e nenhum caminho da API precisa ser listado.
+
+O `vercel.json` usa `builds` + `routes` (e nao `functions` + `rewrites`) porque
+`routes` preserva o caminho original da requisicao. Com `rewrites`, o que chega
+ao ASGI e o caminho de **destino** (`/api/index`): nenhuma rota do FastAPI casa
+e a API inteira responde `{"detail":"Not Found"}`, inclusive o `/health`.
+
+Como consequencia dessa escolha, `maxDuration` nao pode ser declarado (a chave
+`functions` nao convive com `builds`); vale o timeout padrao do plano. Se um dia
+precisar de mais, ajuste em Project Settings → Functions.
 
 ### Criando o projeto
 
@@ -76,7 +86,7 @@ DATABASE_URL="postgresql+psycopg2://...pooler.supabase.com:6543/postgres" \
 ### Conferindo
 
 ```bash
-curl https://<seu-projeto>.vercel.app/health
+curl https://fin-ai-three-pearl.vercel.app/health
 # {"status":"ok","environment":"production"}
 ```
 
@@ -98,7 +108,7 @@ de cache. No painel basta confirmar que a configuracao foi lida.
 
 | Variavel | Valor |
 | --- | --- |
-| `VITE_API_URL` | `https://<seu-projeto>.vercel.app/api/v1` |
+| `VITE_API_URL` | `https://fin-ai-three-pearl.vercel.app/api/v1` |
 | `VITE_SUPABASE_URL` | `https://<ref>.supabase.co` |
 | `VITE_SUPABASE_ANON_KEY` | chave `anon` |
 
@@ -134,6 +144,8 @@ A ordem importa: a URL do Netlify so existe depois que o site sobe.
 
 | Sintoma | Causa provavel |
 | --- | --- |
+| **Toda** rota devolve `{"detail":"Not Found"}`, ate `/health` | O ASGI esta recebendo `/api/index` em vez do caminho original — `vercel.json` voltou para `rewrites` |
+| `/health` responde `"environment":"development"` | Nenhuma variavel de ambiente configurada na Vercel: o app subiu so com os defaults do codigo |
 | `CORS policy: No 'Access-Control-Allow-Origin'` | URL do Netlify fora de `CORS_ORIGINS`, ou a variavel mudou sem redeploy |
 | Frontend chama `localhost:8000` em producao | `VITE_API_URL` ausente no build — defina e refaca o deploy |
 | 404 ao recarregar uma rota interna | Redirect de SPA nao aplicado; confira se o `netlify.toml` foi lido |
