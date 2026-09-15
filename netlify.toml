@@ -1,0 +1,45 @@
+# Deploy do frontend (Vite + React) no Netlify.
+#
+# O backend NAO vive aqui: ele roda na Vercel. O unico vinculo entre os dois e
+# a variavel VITE_API_URL, configurada no painel do Netlify.
+
+[build]
+  # O package.json esta em frontend/, entao o build inteiro roda a partir dali.
+  base = "frontend"
+  command = "npm run build"
+  # Relativo ao `base`: o artefato final e frontend/dist.
+  publish = "dist"
+
+[build.environment]
+  # Vite 6 exige Node 18+; fixamos a versao para o build nao mudar sozinho
+  # quando o Netlify trocar o default.
+  NODE_VERSION = "20"
+  # Instala tambem devDependencies (typescript, vite) - sem isso o build quebra.
+  NPM_FLAGS = "--include=dev"
+
+# SPA: o React Router resolve as rotas no cliente, entao qualquer caminho
+# desconhecido precisa devolver o index.html com status 200 (nao 301/404).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Os assets do Vite tem hash no nome: mudou o conteudo, mudou a URL.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# O index.html nao pode ser cacheado, senao o navegador continua apontando para
+# os assets do deploy anterior.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"

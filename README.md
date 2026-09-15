@@ -152,6 +152,18 @@ garante divergência de schema.
 
 ---
 
+## Deploy
+
+O frontend vai para o **Netlify** (estático, configurado em `netlify.toml`) e o
+backend para a **Vercel** (serverless, em `backend/vercel.json`). O banco e o
+Auth continuam no Supabase nos dois ambientes.
+
+O passo a passo — variáveis de ambiente de cada plataforma, connection string
+do pooler, quando rodar as migrations e a ordem de subida — está em
+[docs/deploy.md](docs/deploy.md).
+
+---
+
 ## Arquitetura
 
 ```

@@ -1,0 +1,14 @@
+# Quanto menor o bundle, mais rapido o cold start.
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+tests/
+scripts/
+Dockerfile
+.dockerignore
+requirements-dev.txt
+pytest.ini

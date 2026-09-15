@@ -1,6 +1,7 @@
 """Configuracao central da aplicacao, carregada a partir do ambiente."""
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 from typing import Annotated, Literal
 
@@ -41,6 +42,11 @@ class Settings(BaseSettings):
     # de ser reaberta em silencio.
     db_pool_pre_ping: bool = True
     db_pool_recycle: int = 1800
+    # Em serverless (Vercel) cada instancia da function teria o proprio pool e
+    # as conexoes ficariam abertas depois da resposta, estourando o limite do
+    # Supabase. Sem pool, cada request abre e fecha a sua conexao -- o pooler do
+    # Supabase (porta 6543) e quem faz o reuso. Liga sozinho na Vercel.
+    db_disable_pool: bool = Field(default_factory=lambda: bool(os.getenv("VERCEL")))
 
     # -- Supabase ----------------------------------------------------------
     supabase_url: str = ""
@@ -58,6 +64,10 @@ class Settings(BaseSettings):
     # NoDecode: sem ele o pydantic-settings tenta ler o valor do .env como
     # JSON. Queremos aceitar a forma simples "a,b,c".
     cors_origins: Annotated[list[str], NoDecode] = ["http://localhost:5173"]
+    # Os deploy previews do Netlify recebem um subdominio novo a cada build, que
+    # nao da para listar de antemao. Ex.: https://.*--meu-site\.netlify\.app
+    # Vazio (o padrao) mantem so a lista acima.
+    cors_origin_regex: str = ""
 
     # -- Dados de mercado (brapi.dev) --------------------------------------
     market_data_provider: str = "brapi"

@@ -27,3 +27,6 @@ Thumbs.db
 *.sqlite3
 postgres-data/
 .ruff_cache/
+
+# Cache incremental do tsc: derivado do codigo, nunca versionado.
+*.tsbuildinfo
