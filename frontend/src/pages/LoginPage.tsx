@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { APP_NAME, APP_SYMBOL } from '@/brand'
 import { GlassButton } from '@/components/ui/GlassButton'
 import { GlassInput } from '@/components/ui/GlassInput'
 import { ErrorNotice } from '@/components/ui/Feedback'
@@ -79,9 +80,9 @@ export function LoginPage() {
       <div className="glass glass--level-3 login__panel">
         <div className="login__brand">
           <span className="login__logo" aria-hidden="true">
-            F
+            {APP_SYMBOL}
           </span>
-          <span className="login__wordmark">Fin</span>
+          <span className="login__wordmark">{APP_NAME}</span>
         </div>
 
         <div>

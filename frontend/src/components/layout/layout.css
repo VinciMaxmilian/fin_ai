@@ -59,18 +59,25 @@
   display: grid;
   place-items: center;
   border-radius: var(--radius-xs);
-  background: linear-gradient(150deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #2ec9b0));
+  background: linear-gradient(150deg, var(--brand), var(--brand-deep));
   color: #fff;
   font-weight: var(--weight-bold);
-  font-size: var(--text-base);
+  /* O cifrao e a marca, entao ele ocupa o tile inteiro -- um "$" no tamanho da
+     letra anterior ficava miudo demais para ser lido como logo. */
+  font-size: var(--text-md);
+  line-height: 1;
   box-shadow: var(--shadow-sm);
 }
 
 .sidebar__wordmark {
   font-family: var(--font-display);
-  font-size: var(--text-md);
+  /* "La Casa Del Money" tem 17 caracteres e a sidebar so oferece ~164px depois
+     do tile e dos paddings. Um corpo abaixo do titulo cabe em uma linha; o
+     nowrap garante que nunca quebre no meio do nome. */
+  font-size: var(--text-base);
   font-weight: var(--weight-semibold);
   letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .sidebar__nav {

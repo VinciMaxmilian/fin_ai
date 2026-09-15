@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     )
 
     # -- Aplicacao ---------------------------------------------------------
-    app_name: str = "Fin API"
+    app_name: str = "La Casa Del Money API"
     api_v1_prefix: str = "/api/v1"
     environment: Literal["development", "staging", "production"] = "development"
     debug: bool = False

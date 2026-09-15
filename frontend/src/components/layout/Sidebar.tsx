@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { APP_NAME, APP_SYMBOL } from '@/brand'
 import { Icon } from '@/components/ui/Icon'
 import { NAVIGATION } from './navigation'
 import { useAuth } from '@/stores/auth'
@@ -10,9 +11,9 @@ export function Brand({ showWordmark = true }: { showWordmark?: boolean }) {
   return (
     <div className="sidebar__brand">
       <span className="sidebar__logo" aria-hidden="true">
-        F
+        {APP_SYMBOL}
       </span>
-      {showWordmark && <span className="sidebar__wordmark">Fin</span>}
+      {showWordmark && <span className="sidebar__wordmark">{APP_NAME}</span>}
     </div>
   )
 }

@@ -20,8 +20,12 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
+# A marca aparece no cabecalho de todo e-mail e no comentario de topo do
+# arquivo gerado. Mantida aqui para nao se repetir por cinco templates.
+APP_NAME = "La Casa Del Money"
+
 SHELL = """<!--
-  Fin — {titulo_arquivo} (Supabase Auth)
+  {marca} — {titulo_arquivo} (Supabase Auth)
 
   Cole em: painel do Supabase → Authentication → Emails → {local}
 
@@ -77,7 +81,7 @@ SHELL = """<!--
                   <tr>
                     <td width="36" height="36" align="center" valign="middle" bgcolor="#5B6BD9" style="width:36px; height:36px; border-radius:10px; background-color:#5b6bd9; color:#ffffff; font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif; font-size:18px; font-weight:700; line-height:36px; text-align:center;">F</td>
                     <td style="padding-left:10px;">
-                      <span class="fin-title" style="font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif; font-size:18px; font-weight:600; color:#1c1c1e; letter-spacing:-0.3px;">Fin</span>
+                      <span class="fin-title" style="font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif; font-size:18px; font-weight:600; color:#1c1c1e; letter-spacing:-0.3px;">{marca}</span>
                     </td>
                   </tr>
                 </table>
@@ -171,7 +175,7 @@ TEMPLATES = [
         local="Confirm signup",
         titulo="Confirme seu e-mail",
         titulo_arquivo="confirmação de e-mail",
-        previa="Confirme seu endereço para ativar sua conta no Fin.",
+        previa="Confirme seu endereço para ativar sua conta.",
         texto=(
             "Falta um passo para sua conta ficar pronta. Toque no botão abaixo e você "
             "já entra direto no app."
@@ -180,8 +184,8 @@ TEMPLATES = [
         validade="O link vale por 24 horas.",
         rodape=(
             f"Você recebeu este e-mail porque alguém usou {EMAIL} para criar uma conta "
-            "no Fin. Se não foi você, pode ignorar — sem a confirmação, a conta não é "
-            "ativada."
+            f"na {APP_NAME}. Se não foi você, pode ignorar — sem a confirmação, a conta "
+            "não é ativada."
         ),
     ),
     Template(
@@ -189,7 +193,7 @@ TEMPLATES = [
         local="Reset password",
         titulo="Redefinir sua senha",
         titulo_arquivo="recuperação de senha",
-        previa="Link para você criar uma nova senha no Fin.",
+        previa="Link para você criar uma nova senha.",
         texto=(
             "Recebemos um pedido para redefinir sua senha. Toque no botão abaixo para "
             "escolher uma nova."
@@ -206,9 +210,9 @@ TEMPLATES = [
         local="Magic Link",
         titulo="Seu link de acesso",
         titulo_arquivo="link mágico",
-        previa="Entre no Fin sem digitar senha.",
+        previa="Entre sem digitar senha.",
         texto="Toque no botão abaixo para entrar na sua conta. Não precisa de senha.",
-        botao="Entrar no Fin",
+        botao="Entrar",
         validade="O link vale por 1 hora e só pode ser usado uma vez.",
         rodape=(
             f"Este e-mail foi enviado para {EMAIL}. Se você não pediu este acesso, "
@@ -220,7 +224,7 @@ TEMPLATES = [
         local="Change Email Address",
         titulo="Confirme seu novo e-mail",
         titulo_arquivo="troca de e-mail",
-        previa="Confirme o novo endereço da sua conta no Fin.",
+        previa="Confirme o novo endereço da sua conta.",
         texto=(
             "Você pediu para trocar o e-mail da sua conta. Confirme o novo endereço "
             "para a mudança valer."
@@ -238,6 +242,7 @@ TEMPLATES = [
 def main() -> int:
     for template in TEMPLATES:
         html = SHELL.format(
+            marca=APP_NAME,
             titulo=template.titulo,
             titulo_arquivo=template.titulo_arquivo,
             local=template.local,

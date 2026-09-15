@@ -28,7 +28,7 @@ python docs/email-templates/gerar.py
 4. Ajuste o assunto. Sugestões:
    - Confirm signup — `Confirme seu e-mail`
    - Reset password — `Redefinir sua senha`
-   - Magic Link — `Seu link de acesso ao Fin`
+   - Magic Link — `Seu link de acesso`
    - Change Email — `Confirme seu novo e-mail`
 5. Salve e teste criando uma conta.
 
@@ -75,7 +75,7 @@ Supabase Auth <noreply@mail.app.supabase.io>
 ```
 
 Isso é o que mais destoa de um produto próprio, e o template não resolve — é o
-SMTP padrão do Supabase. Para o e-mail sair como **Fin**, configure SMTP próprio
+SMTP padrão do Supabase. Para o e-mail sair como **La Casa Del Money**, configure SMTP próprio
 em **Project Settings → Authentication → SMTP Settings**, com Resend, Postmark,
 SendGrid, Amazon SES ou similar.
 

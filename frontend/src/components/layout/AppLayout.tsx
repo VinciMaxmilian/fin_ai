@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { APP_NAME } from '@/brand'
 import { Icon } from '@/components/ui/Icon'
 import { GlassButton } from '@/components/ui/GlassButton'
 import { Brand, NavLinks, Sidebar, UserChip } from './Sidebar'
@@ -17,7 +18,7 @@ export function AppLayout() {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   const current = findNavItem(location.pathname)
-  const title = current?.label ?? 'Fin'
+  const title = current?.label ?? APP_NAME
 
   // Mudou de rota: a gaveta fecha sozinha.
   useEffect(() => {
@@ -25,7 +26,7 @@ export function AppLayout() {
   }, [location.pathname])
 
   useEffect(() => {
-    document.title = title === 'Fin' ? 'Fin' : `${title} · Fin`
+    document.title = title === APP_NAME ? APP_NAME : `${title} · ${APP_NAME}`
   }, [title])
 
   return (

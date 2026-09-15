@@ -27,10 +27,11 @@
   display: grid;
   place-items: center;
   border-radius: var(--radius-sm);
-  background: linear-gradient(150deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #2ec9b0));
+  background: linear-gradient(150deg, var(--brand), var(--brand-deep));
   color: #fff;
   font-weight: var(--weight-bold);
-  font-size: var(--text-md);
+  font-size: var(--text-lg);
+  line-height: 1;
   box-shadow: var(--shadow-sm);
 }
 
@@ -39,6 +40,7 @@
   font-size: var(--text-lg);
   font-weight: var(--weight-semibold);
   letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .login__title {

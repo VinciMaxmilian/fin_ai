@@ -1,10 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="La Casa Del Money">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#5B6BD9"/>
-      <stop offset="1" stop-color="#2EC9B0"/>
+      <stop offset="0" stop-color="#E23A31"/>
+      <stop offset="1" stop-color="#9E1B1B"/>
     </linearGradient>
   </defs>
   <rect width="32" height="32" rx="8" fill="url(#g)"/>
-  <path d="M11 23V9h10M11 16h7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+  <!-- Cifrao desenhado como path, e nao como <text>: fonte de sistema nao e
+       garantida em todo lugar que renderiza um favicon. -->
+  <g stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="none">
+    <path d="M16 5.6v20.8"/>
+    <path d="M20.4 11.6C20.4 9.4 18.4 8.2 16 8.2S11.6 9.4 11.6 11.6c0 2.2 2 3 4.4 3.8s4.4 1.6 4.4 3.8c0 2.2-2 3.4-4.4 3.4s-4.4-1.2-4.4-3.4"/>
+  </g>
 </svg>

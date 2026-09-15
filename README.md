@@ -1,4 +1,4 @@
-# Fin
+# La Casa Del Money
 
 WebApp de gestão financeira pessoal. React + TypeScript no front, FastAPI +
 PostgreSQL (Supabase) no back.
