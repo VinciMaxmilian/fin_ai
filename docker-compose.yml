@@ -14,7 +14,8 @@ services:
       context: ./backend
     env_file: .env
     environment:
-      # Dentro da rede do compose o frontend é servido pelo nginx na porta 80.
+      # O navegador acessa o frontend pela porta publicada (5173), e é esse
+      # valor que chega no header Origin — não a porta interna do nginx.
       CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
     ports:
       - '8000:8000'
@@ -38,8 +39,9 @@ services:
         VITE_API_URL: http://localhost:8000/api/v1
         VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
         VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+    # 8080 no container: o nginx roda sem privilegio e nao pode abrir a 80.
     ports:
-      - '5173:80'
+      - '5173:8080'
     depends_on:
       api:
         condition: service_healthy

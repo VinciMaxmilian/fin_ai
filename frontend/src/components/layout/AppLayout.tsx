@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { APP_NAME } from '@/brand'
 import { Icon } from '@/components/ui/Icon'
 import { GlassButton } from '@/components/ui/GlassButton'
+import { SecurityNotice } from '@/components/ui/SecurityNotice'
 import { Brand, NavLinks, Sidebar, UserChip } from './Sidebar'
 import { BOTTOM_NAV, findNavItem } from './navigation'
 import { useAuth } from '@/stores/auth'
@@ -72,6 +73,7 @@ export function AppLayout() {
 
         <main className="app-content">
           <Outlet />
+          <SecurityNotice variant="footer" />
         </main>
       </div>
 

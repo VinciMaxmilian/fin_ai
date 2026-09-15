@@ -49,6 +49,7 @@ export type IconName =
   | 'sun'
   | 'moon'
   | 'alert'
+  | 'shield'
 
 const PATHS: Record<IconName, string> = {
   dashboard: 'M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V9.5Z',
@@ -92,6 +93,7 @@ const PATHS: Record<IconName, string> = {
   sun: 'M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4',
   moon: 'M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z',
   alert: 'M12 3 2 20h20L12 3ZM12 10v4M12 17.5h.01',
+  shield: 'M12 3l7 3v5.5c0 4.3-2.9 7.8-7 8.5-4.1-.7-7-4.2-7-8.5V6l7-3ZM9 12l2 2 4-4',
 }
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {

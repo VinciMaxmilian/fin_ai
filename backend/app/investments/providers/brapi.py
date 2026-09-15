@@ -35,6 +35,7 @@ from app.investments.providers.base import (
     Quote,
     SymbolNotFoundError,
 )
+from app.investments.tickers import is_valid_ticker, normalize_ticker
 
 logger = logging.getLogger(__name__)
 
@@ -198,7 +199,13 @@ class BrapiProvider(MarketDataProvider):
 
     # -- dados --------------------------------------------------------------
     def get_quotes(self, symbols: list[str]) -> dict[str, Quote]:
-        wanted = [symbol.strip().upper() for symbol in symbols if symbol and symbol.strip()]
+        # Barreira final: um ticker fora do formato nunca entra na URL, mesmo
+        # que tenha chegado ao banco por um caminho que nao valide.
+        wanted = [
+            symbol.strip().upper()
+            for symbol in symbols
+            if symbol and is_valid_ticker(symbol)
+        ]
         if not wanted:
             return {}
 
@@ -266,7 +273,7 @@ class BrapiProvider(MarketDataProvider):
         self, symbol: str, *, range_: str = "1mo", interval: str = "1d"
     ) -> list[HistoricalPoint]:
         payload = self._request(
-            f"/quote/{symbol.strip().upper()}",
+            f"/quote/{normalize_ticker(symbol)}",
             {"range": range_, "interval": interval},
         )
         results = payload.get("results")
@@ -301,7 +308,7 @@ class BrapiProvider(MarketDataProvider):
 
     def get_dividends(self, symbol: str) -> list[Dividend]:
         payload = self._request(
-            f"/quote/{symbol.strip().upper()}", {"dividends": "true"}
+            f"/quote/{normalize_ticker(symbol)}", {"dividends": "true"}
         )
         results = payload.get("results")
         if not isinstance(results, list) or not results:
@@ -337,7 +344,7 @@ class BrapiProvider(MarketDataProvider):
 
     def search(self, term: str) -> list[AssetSearchResult]:
         cleaned = term.strip().upper()
-        if not cleaned:
+        if not cleaned or not is_valid_ticker(cleaned):
             return []
 
         payload = self._request("/available", {"search": cleaned})

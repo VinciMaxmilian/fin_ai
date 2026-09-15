@@ -11,6 +11,7 @@ from app.cards.router import router as cards_router
 from app.categories.router import router as categories_router
 from app.core.config import settings
 from app.core.errors import register_error_handlers
+from app.core.middleware import RateLimitMiddleware, SecurityHeadersMiddleware
 from app.goals.router import router as goals_router
 from app.installments.router import router as installments_router
 from app.investments.router import router as investments_router
@@ -30,23 +31,35 @@ Android compartilhem exatamente o mesmo comportamento.
 
 
 def create_app() -> FastAPI:
+    docs = settings.show_docs
     app = FastAPI(
         title=settings.app_name,
         description=DESCRIPTION,
         version="1.0.0",
-        docs_url="/docs",
-        redoc_url="/redoc",
-        openapi_url="/openapi.json",
+        docs_url="/docs" if docs else None,
+        redoc_url="/redoc" if docs else None,
+        openapi_url="/openapi.json" if docs else None,
     )
 
+    # A ordem importa: o registrado por ULTIMO e o mais EXTERNO. Queremos, de
+    # fora para dentro, CORS -> cabecalhos -> limite. O CORS precisa ser o mais
+    # externo: sem os cabecalhos dele na resposta 429, o navegador esconde o
+    # corpo e o usuario ve um erro de CORS em vez de "muitas requisicoes".
+    app.add_middleware(RateLimitMiddleware)
+    app.add_middleware(SecurityHeadersMiddleware)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
         # Cobre os deploy previews do Netlify, cujo subdominio muda a cada build.
         allow_origin_regex=settings.cors_origin_regex or None,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        # A autenticacao e por Bearer token no cabecalho, nao por cookie.
+        # Sem credenciais no CORS o navegador nunca anexa cookie de sessao a
+        # uma chamada entre origens -- e CSRF deixa de ser possivel por
+        # construcao, nao por convencao.
+        allow_credentials=False,
+        allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type", "Accept"],
+        max_age=600,
     )
 
     register_error_handlers(app)
@@ -76,12 +89,14 @@ def create_app() -> FastAPI:
         Sem isto a raiz devolve o 404 do roteador, que parece deploy quebrado
         mesmo com a API inteira de pe.
         """
-        return {
+        payload = {
             "name": settings.app_name,
-            "docs": "/docs",
             "health": "/health",
             "api": settings.api_v1_prefix,
         }
+        if settings.show_docs:
+            payload["docs"] = "/docs"
+        return payload
 
     @app.get("/health", tags=["Infra"], summary="Verificacao de saude")
     def health() -> dict[str, str]:

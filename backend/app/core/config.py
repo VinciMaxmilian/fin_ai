@@ -72,6 +72,19 @@ class Settings(BaseSettings):
     # Vazio (o padrao) mantem so a lista acima.
     cors_origin_regex: str = ""
 
+    # -- Limite de requisicoes ---------------------------------------------
+    # Teto por cliente por minuto. O teto de mercado e menor porque cada
+    # chamada dessas consome cota da brapi.
+    rate_limit_per_minute: int = 120
+    rate_limit_market_per_minute: int = 30
+
+    # -- Documentacao ------------------------------------------------------
+    # /docs, /redoc e /openapi.json descrevem a superficie inteira da API.
+    # Util em desenvolvimento, desnecessario em producao -- onde so serve de
+    # mapa para quem for sondar. `None` (o padrao) resolve por ambiente:
+    # ligada fora de producao. DOCS_ENABLED=true forca em qualquer ambiente.
+    docs_enabled: bool | None = None
+
     # -- Dados de mercado (brapi.dev) --------------------------------------
     market_data_provider: str = "brapi"
     brapi_base_url: str = "https://brapi.dev/api"
@@ -118,8 +131,24 @@ class Settings(BaseSettings):
         if isinstance(value, str):
             value = [item for item in value.split(",")]
         if isinstance(value, list):
-            return [str(item).strip().rstrip("/") for item in value if str(item).strip()]
+            origins = [str(item).strip().rstrip("/") for item in value if str(item).strip()]
+            # "*" combinado com allow_credentials libera a API para qualquer
+            # site com a sessao do usuario junto. Falhar aqui e melhor do que
+            # descobrir isso em producao.
+            if "*" in origins:
+                raise ValueError(
+                    'CORS_ORIGINS nao aceita "*": liste as origens permitidas explicitamente.'
+                )
+            return origins
         return value
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def show_docs(self) -> bool:
+        """Se a documentacao interativa deve ser publicada."""
+        if self.docs_enabled is not None:
+            return self.docs_enabled
+        return self.environment != "production"
 
     @computed_field  # type: ignore[prop-decorator]
     @property

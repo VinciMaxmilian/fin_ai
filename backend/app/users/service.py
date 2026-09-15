@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.categories.defaults import DEFAULT_CATEGORIES
 from app.categories.models import Category
+from app.core.errors import AuthError
 from app.core.security import TokenClaims
 from app.users.models import User
 
@@ -18,7 +19,11 @@ class UserService:
 
     def get_or_create_from_claims(self, claims: TokenClaims) -> User:
         """Provisiona o perfil local na primeira requisicao autenticada."""
-        user_id = uuid.UUID(claims.subject)
+        try:
+            user_id = uuid.UUID(claims.subject)
+        except ValueError as exc:
+            # Token bem assinado, mas com `sub` fora do formato esperado.
+            raise AuthError("Token invalido.") from exc
         user = self.db.get(User, user_id)
 
         if user is not None:

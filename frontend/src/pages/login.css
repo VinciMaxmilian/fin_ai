@@ -60,22 +60,6 @@
   gap: var(--space-4);
 }
 
-.login__divider {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  font-size: var(--text-xs);
-  color: var(--text-tertiary);
-}
-
-.login__divider::before,
-.login__divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background-color: var(--glass-hairline);
-}
-
 .login__links {
   display: flex;
   justify-content: space-between;

@@ -93,6 +93,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { needsConfirmation: !data.session }
       },
 
+      // Nenhuma tela expoe este metodo no momento: o botao de login com o
+      // Google foi retirado. Mantido porque o provedor segue habilitado no
+      // Supabase e reativar vira uma linha de JSX.
       signInWithGoogle: async () => {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',

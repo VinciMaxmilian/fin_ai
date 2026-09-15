@@ -1,0 +1,43 @@
+/* Selo de segurança: presente, mas nunca disputando atenção com o conteúdo. */
+.security-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  color: var(--text-tertiary);
+  text-align: center;
+  /* O texto quebra antes de a linha encostar na borda em telas estreitas. */
+  text-wrap: balance;
+}
+
+.security-notice__icon {
+  /* Sem isto o ícone encolhe quando o texto quebra em duas linhas. */
+  flex-shrink: 0;
+  color: var(--positive);
+}
+
+/* Na tela de login o espaco ja vem do `gap` do painel: nada a acrescentar. */
+.security-notice--inline {
+  margin-top: 0;
+}
+
+/* No rodapé das páginas internas, com uma linha fina separando do conteúdo. */
+.security-notice--footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-top: 1px solid var(--glass-hairline);
+}
+
+@media (max-width: 480px) {
+  .security-notice {
+    /* Alinhado ao topo: em duas linhas, o ícone acompanha a primeira. */
+    align-items: flex-start;
+  }
+
+  .security-notice__icon {
+    margin-top: 1px;
+  }
+}

@@ -28,7 +28,10 @@ def auth_config() -> AuthConfig:
     return AuthConfig(
         supabase_url=settings.supabase_url,
         supabase_anon_key=settings.supabase_anon_key,
-        providers=["password", "google"],
+        # A interface hoje oferece apenas e-mail e senha. O metodo do
+        # Google segue implementado em stores/auth.tsx caso volte a ser
+        # exposto -- ao reativar, acrescente "google" aqui tambem.
+        providers=["password"],
     )
 
 

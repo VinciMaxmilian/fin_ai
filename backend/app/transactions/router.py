@@ -24,7 +24,11 @@ router = APIRouter(prefix="/transactions", tags=["Transacoes"])
 
 
 def transaction_filters(
-    search: str | None = Query(default=None, description="Busca na descricao e nas observacoes"),
+    search: str | None = Query(
+        default=None,
+        max_length=120,
+        description="Busca na descricao e nas observacoes",
+    ),
     type: TransactionType | None = Query(default=None),
     category_id: uuid.UUID | None = Query(default=None),
     account_id: uuid.UUID | None = Query(default=None),

@@ -37,9 +37,10 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
-    Referrer-Policy = "strict-origin-when-cross-origin"
+# Os cabecalhos de seguranca NAO ficam aqui: eles saem em dist/_headers, gerado
+# no build por frontend/build/security-headers.ts. O motivo e a CSP -- a
+# diretiva connect-src precisa das URLs reais da API e do Supabase, que mudam
+# por ambiente e so existem como variaveis no momento do build. Mantidos aqui,
+# ficariam errados em algum ambiente, e CSP errada quebra o app em silencio.
+#
+# Para conferir o que foi gerado: `npm run build && cat dist/_headers`.

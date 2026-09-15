@@ -7,6 +7,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
 
+from app.investments.tickers import normalize_ticker
+
 from app.investments.models import InvestmentType
 
 # De onde veio o preco usado no calculo. A interface usa isso para ser honesta
@@ -36,10 +38,10 @@ class InvestmentBase(BaseModel):
     @field_validator("ticker")
     @classmethod
     def _normalize_ticker(cls, value: str | None) -> str | None:
-        if value is None:
+        if value is None or not value.strip():
             return None
-        cleaned = value.strip().upper()
-        return cleaned or None
+        # normalize_ticker levanta ValueError, que o pydantic converte em 422.
+        return normalize_ticker(value)
 
 
 class InvestmentCreate(InvestmentBase):
@@ -59,10 +61,10 @@ class InvestmentUpdate(BaseModel):
     @field_validator("ticker")
     @classmethod
     def _normalize_ticker(cls, value: str | None) -> str | None:
-        if value is None:
+        if value is None or not value.strip():
             return None
-        cleaned = value.strip().upper()
-        return cleaned or None
+        # normalize_ticker levanta ValueError, que o pydantic converte em 422.
+        return normalize_ticker(value)
 
 
 class InvestmentRead(InvestmentBase):

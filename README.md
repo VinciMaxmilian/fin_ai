@@ -4,6 +4,7 @@ WebApp de gestão financeira pessoal. React + TypeScript no front, FastAPI +
 PostgreSQL (Supabase) no back.
 
 > Estado atual do projeto, decisões e pendências: **[STATUS.md](STATUS.md)**
+> Segurança (o que protege os dados e o que não está coberto): **[docs/seguranca.md](docs/seguranca.md)**
 > Integração de dados de mercado: **[docs/investimentos-brapi.md](docs/investimentos-brapi.md)**
 > Contas remuneradas (% do CDI): **[docs/contas-remuneradas.md](docs/contas-remuneradas.md)**
 > Performance e latência do banco: **[docs/performance.md](docs/performance.md)**

@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 from dataclasses import asdict
 
-from fastapi import APIRouter, Query, status
+from fastapi import APIRouter, Path, Query, status
 
 from app.core.deps import CurrentUser, DbSession
 from app.core.errors import NotFoundError, ValidationError
@@ -25,6 +25,7 @@ from app.investments.schemas import (
     QuoteRead,
 )
 from app.investments.services import InvestmentService, MarketDataService
+from app.investments.tickers import TICKER_PATTERN
 
 router = APIRouter(prefix="/investments", tags=["Investimentos"])
 
@@ -88,7 +89,12 @@ def capabilities() -> MarketCapabilitiesRead:
 )
 def search_assets(
     _: CurrentUser,
-    term: str = Query(min_length=1, max_length=20, description="Trecho do codigo"),
+    term: str = Query(
+        min_length=1,
+        max_length=16,
+        pattern=TICKER_PATTERN,
+        description="Trecho do codigo",
+    ),
 ) -> list[AssetSearchRead]:
     results = MarketDataService().search(term)
     return [AssetSearchRead(symbol=item.symbol, kind=item.kind) for item in results]
@@ -99,7 +105,10 @@ def search_assets(
     response_model=QuoteRead,
     summary="Cotacao atual de um ticker",
 )
-def quote(ticker: str, _: CurrentUser) -> QuoteRead:
+def quote(
+    _: CurrentUser,
+    ticker: str = Path(pattern=TICKER_PATTERN, description="Codigo do ativo"),
+) -> QuoteRead:
     result = MarketDataService().get_quote(ticker)
     if result is None:
         raise NotFoundError(
@@ -119,8 +128,8 @@ def quote(ticker: str, _: CurrentUser) -> QuoteRead:
     summary="Historico de precos",
 )
 def history(
-    ticker: str,
     _: CurrentUser,
+    ticker: str = Path(pattern=TICKER_PATTERN, description="Codigo do ativo"),
     range: str = Query(default="1mo", description="1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, max"),
     interval: str = Query(default="1d", description="1d, 5d, 1wk, 1mo, 3mo"),
 ) -> list[HistoricalPointRead]:
@@ -151,8 +160,8 @@ def history(
     summary="Dividendos pagos",
 )
 def dividends(
-    ticker: str,
     _: CurrentUser,
+    ticker: str = Path(pattern=TICKER_PATTERN, description="Codigo do ativo"),
     limit: int = Query(default=24, ge=1, le=200),
 ) -> list[DividendRead]:
     try:
