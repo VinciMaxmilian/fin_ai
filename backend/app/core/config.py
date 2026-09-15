@@ -11,7 +11,10 @@ from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=(".env", "../.env"),
+        # Ordem importa: o ULTIMO arquivo vence. A raiz vem primeiro para que
+        # backend/.env, que e o especifico, possa sobrescreve-la -- e nao o
+        # contrario. Variavel exportada no ambiente do SO ganha dos dois.
+        env_file=("../.env", ".env"),
         env_file_encoding="utf-8",
         extra="ignore",
         case_sensitive=False,
