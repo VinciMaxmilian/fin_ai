@@ -109,8 +109,16 @@ class Settings(BaseSettings):
     @field_validator("cors_origins", mode="before")
     @classmethod
     def _split_origins(cls, value: object) -> object:
+        """Aceita "a,b,c" e normaliza cada origem.
+
+        A barra final e o erro classico: copiar "https://site.netlify.app/" do
+        navegador nunca casa, porque o header Origin vem sem ela. Falha calada e
+        indistinguivel de "esqueci de configurar", entao cortamos aqui.
+        """
         if isinstance(value, str):
-            return [item.strip() for item in value.split(",") if item.strip()]
+            value = [item for item in value.split(",")]
+        if isinstance(value, list):
+            return [str(item).strip().rstrip("/") for item in value if str(item).strip()]
         return value
 
     @computed_field  # type: ignore[prop-decorator]

@@ -66,8 +66,8 @@ Project Settings → Database → Connection pooling, modo *Transaction*). A por
 | `SUPABASE_URL` | `https://<ref>.supabase.co` |
 | `SUPABASE_ANON_KEY` | chave `anon` |
 | `SUPABASE_SERVICE_KEY` | chave `service_role` — **segredo**, nunca no frontend |
-| `CORS_ORIGINS` | `https://<seu-site>.netlify.app` (virgula separa varias) |
-| `CORS_ORIGIN_REGEX` | opcional: `https://.*--<seu-site>\.netlify\.app` para liberar os deploy previews |
+| `CORS_ORIGINS` | `https://lacasadelmoney.netlify.app` (virgula separa varias) |
+| `CORS_ORIGIN_REGEX` | opcional: `https://.*--lacasadelmoney\.netlify\.app` para liberar os deploy previews e branch deploys |
 | `BRAPI_TOKEN` | token da brapi.dev — **segredo** |
 
 O prefixo `postgresql+psycopg2://` importa: e o dialeto que o SQLAlchemy espera.
@@ -149,6 +149,19 @@ A ordem importa: a URL do Netlify so existe depois que o site sobe.
 4. No Supabase, em **Authentication → URL Configuration**, adicione a URL do
    Netlify em *Site URL* e em *Redirect URLs*. Sem isso o login por email e o
    OAuth voltam para `localhost`.
+
+## URLs em producao
+
+| Peca | URL |
+| --- | --- |
+| Frontend (Netlify) | <https://lacasadelmoney.netlify.app> |
+| Backend (Vercel) | <https://fin-ai-ten-inky.vercel.app> |
+| `VITE_API_URL` no Netlify | `https://fin-ai-ten-inky.vercel.app/api/v1` |
+| `CORS_ORIGINS` na Vercel | `https://lacasadelmoney.netlify.app` |
+
+Sem barra no fim: o header `Origin` do navegador nunca a envia, e o
+`allow_origin_regex` do Starlette compara com `fullmatch`. O validador em
+`app/core/config.py` corta a barra caso ela venha colada do painel.
 
 ## Problemas comuns
 
