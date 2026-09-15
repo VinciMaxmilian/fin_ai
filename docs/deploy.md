@@ -17,7 +17,13 @@ Netlify (estatico)            Vercel (serverless)          Supabase
 
 ## 1. Backend na Vercel
 
-URL do projeto: <https://fin-ai-three-pearl.vercel.app>
+URL do projeto: <https://fin-ai-ten-inky.vercel.app>
+
+> Essa URL e gerada pela Vercel e **muda se o projeto for recriado** -- ja mudou
+> uma vez (`fin-ai-three-pearl` -> `fin-ai-ten-inky`). Isso importa mais do que
+> parece: a `VITE_API_URL` e embutida no bundle **durante o build** do Netlify,
+> entao uma troca de URL derruba o frontend em producao e so volta com um novo
+> deploy la. Um dominio proprio na Vercel elimina o problema de vez.
 
 ### Como a API vira uma serverless function
 
@@ -86,11 +92,15 @@ DATABASE_URL="postgresql+psycopg2://...pooler.supabase.com:6543/postgres" \
 ### Conferindo
 
 ```bash
-curl https://fin-ai-three-pearl.vercel.app/health
+curl https://fin-ai-ten-inky.vercel.app/health
 # {"status":"ok","environment":"production"}
 ```
 
-A documentacao interativa fica em `/docs`.
+Se o `environment` vier `development`, as variaveis nao foram aplicadas.
+
+A raiz (`/`) responde com um indice apontando para `/docs`, `/health` e o prefixo
+da API. A documentacao interativa fica em `/docs`; o esquema cru, em
+`/openapi.json`.
 
 ---
 
@@ -108,7 +118,7 @@ de cache. No painel basta confirmar que a configuracao foi lida.
 
 | Variavel | Valor |
 | --- | --- |
-| `VITE_API_URL` | `https://fin-ai-three-pearl.vercel.app/api/v1` |
+| `VITE_API_URL` | `https://fin-ai-ten-inky.vercel.app/api/v1` |
 | `VITE_SUPABASE_URL` | `https://<ref>.supabase.co` |
 | `VITE_SUPABASE_ANON_KEY` | chave `anon` |
 

@@ -69,6 +69,20 @@ def create_app() -> FastAPI:
         api.include_router(router)
     app.include_router(api)
 
+    @app.get("/", tags=["Infra"], summary="Raiz da API")
+    def root() -> dict[str, str]:
+        """Aponta o caminho para quem abre a URL crua no navegador.
+
+        Sem isto a raiz devolve o 404 do roteador, que parece deploy quebrado
+        mesmo com a API inteira de pe.
+        """
+        return {
+            "name": settings.app_name,
+            "docs": "/docs",
+            "health": "/health",
+            "api": settings.api_v1_prefix,
+        }
+
     @app.get("/health", tags=["Infra"], summary="Verificacao de saude")
     def health() -> dict[str, str]:
         return {"status": "ok", "environment": settings.environment}
