@@ -82,3 +82,11 @@
     padding: var(--space-6);
   }
 }
+
+/* Rodape do painel: o aviso de seguranca e a assinatura do projeto. */
+.login__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}

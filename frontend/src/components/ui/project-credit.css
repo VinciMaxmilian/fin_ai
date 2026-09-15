@@ -1,0 +1,42 @@
+/* Assinatura do projeto: discreta o bastante para não competir com a
+   navegação, visível o bastante para ser encontrada e clicada. */
+.project-credit {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: var(--text-xs);
+  line-height: 1.35;
+  color: var(--text-tertiary);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.project-credit:hover,
+.project-credit:focus-visible {
+  color: var(--text-secondary);
+}
+
+.project-credit__author {
+  font-weight: var(--weight-medium);
+  /* Em telas estreitas o nome quebra antes de estourar o contêiner. */
+  overflow-wrap: anywhere;
+}
+
+.project-credit:hover .project-credit__author {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* -- Sidebar: acima da conta, separado por uma linha fina ------------------ */
+.project-credit--sidebar {
+  padding: var(--space-2) var(--space-3);
+  /* Alinha com o .user-chip logo abaixo, que usa o mesmo recuo lateral. */
+  border-top: 1px solid var(--glass-hairline);
+  padding-top: var(--space-3);
+}
+
+/* -- Login: centralizado, fechando o painel ------------------------------- */
+.project-credit--login {
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+}

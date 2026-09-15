@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { APP_NAME, APP_SYMBOL } from '@/brand'
 import { Icon } from '@/components/ui/Icon'
+import { ProjectCredit } from '@/components/ui/ProjectCredit'
 import { NAVIGATION } from './navigation'
 import { useAuth } from '@/stores/auth'
 import { cx } from '@/utils/cx'
@@ -76,6 +77,7 @@ export function Sidebar() {
       <Brand />
       <NavLinks />
       <div className="sidebar__footer">
+        <ProjectCredit variant="sidebar" />
         <UserChip />
         <button type="button" className="nav-link" onClick={() => void signOut()}>
           <Icon name="logout" size={19} className="nav-link__icon" />

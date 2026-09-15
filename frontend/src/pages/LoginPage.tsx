@@ -3,6 +3,7 @@ import { APP_NAME, APP_SYMBOL } from '@/brand'
 import { GlassButton } from '@/components/ui/GlassButton'
 import { GlassInput } from '@/components/ui/GlassInput'
 import { ErrorNotice } from '@/components/ui/Feedback'
+import { ProjectCredit } from '@/components/ui/ProjectCredit'
 import { SecurityNotice } from '@/components/ui/SecurityNotice'
 import { useToast } from '@/components/ui/Toast'
 import { useAuth } from '@/stores/auth'
@@ -143,7 +144,12 @@ export function LoginPage() {
           )}
         </div>
 
-        <SecurityNotice />
+        {/* Aviso e assinatura formam um bloco so: o `gap` do painel os
+            separaria demais e eles pareceriam dois rodapes soltos. */}
+        <div className="login__meta">
+          <SecurityNotice />
+          <ProjectCredit />
+        </div>
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { APP_NAME } from '@/brand'
 import { Icon } from '@/components/ui/Icon'
 import { GlassButton } from '@/components/ui/GlassButton'
+import { ProjectCredit } from '@/components/ui/ProjectCredit'
 import { SecurityNotice } from '@/components/ui/SecurityNotice'
 import { Brand, NavLinks, Sidebar, UserChip } from './Sidebar'
 import { BOTTOM_NAV, findNavItem } from './navigation'
@@ -84,6 +85,7 @@ export function AppLayout() {
             <Brand />
             <NavLinks onNavigate={() => setDrawerOpen(false)} />
             <div className="sidebar__footer">
+              <ProjectCredit variant="sidebar" />
               <UserChip onClick={() => navigate('/configuracoes')} />
               <button type="button" className="nav-link" onClick={() => void signOut()}>
                 <Icon name="logout" size={19} className="nav-link__icon" />
